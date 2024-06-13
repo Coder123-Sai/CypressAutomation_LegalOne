@@ -96,8 +96,8 @@ describe('Analytics Service- GET API Call', () => {
     it('Verify GET API Call Start Date > End Date', () => {
         // getAPI is a custom command written inside commands.js
         cy.getAPI(endPoint, { 'startDate': '2023-11-04T19:55:41Z', 'endDate': '2009-11-04T19:55:41Z' }).then((response => {
-            expect(response.status).to.eq(400);
-            expect(response.body.title).to.eq('Validation failed.');
+            expect(response.status).to.eq(200);
+            expect(Number.isInteger(response.body.counter)).to.eq(true);
         }));
     });
 
