@@ -1,23 +1,31 @@
 describe('Analytics Service- DELETE API Call', () => {
 
     const endPoint = '/truncate';
+    const GETendPoint = '/count';
 
-    it('DELETE API Call -204', () => {
+    it('Verify DELETE API Call -204', () => {
         // deleteAPI is a custom command written inside commands.js
         cy.deleteAPI(endPoint).then((response => {
             expect(response.status).to.eq(204);
+        }));
+    });
 
-            // To check the count value after delete.
-            cy.fixture('getAPIParams.json').then((params) => {
-                // getAPI is a custom command written inside commands.js
-                cy.getAPI('/count', params).then((response => {
-                    expect(response.status).to.eq(200);
-                    expect(Number.isInteger(response.body.counter)).to.eq(true);
-                    expect(response.body.counter).to.eq(0);
-                }));
+    it('Verify GET API Call -200 with valid parameters', () => {
+        // cy.fixture is used to fetch the json data inside fixtures folder
+        cy.fixture('getAPIParams.json').then((params) => {
+            // getAPI is a custom command written inside commands.js
+            cy.getAPI(GETendPoint, params).then((response => {
+                expect(response.status).to.eq(200);
+                expect(Number.isInteger(response.body.counter)).to.eq(true);
+                expect(response.body.counter).to.eq(0);
+            }));
+        });
+    });
 
-            });
-
+    it('Verify DELETE API Call - 404 with Invalid endpoint', () => {
+        // getAPI is a custom command written inside commands.js
+        cy.getAPI(endPoint+"/abcd",).then((response => {
+            expect(response.status).to.eq(404);
         }));
     });
 });
